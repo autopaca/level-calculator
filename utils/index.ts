@@ -274,7 +274,7 @@ export const useHedgeInfo = (userAddr: string, llpTokenAddr: string = JuniorLLp)
         const priceDelta = p.averagePrice.sub(a.price.mul(parseEther('1')));
         const pnl = p.size.mul(priceDelta).div(p.averagePrice);
         let fundingFee = await alperpGetter.getFundingFee(indexToken, false, p.size, p.entryFundingRate) as BigNumber;
-        fundingFee = fundingFee.add(p.fundingFeeDebt);
+        fundingFee = fundingFee.add(p.fundingFeeDebt).mul(-1);
         // console.log({pnl: pnl.toString(), p: pnl, priceDetal: priceDelta.toString()})
         //    address, /* account */ address collateralToken, address, /* indexToken */ bool, /* isLong */ uint256 size, uint256 entryBorrowingRate
         let borrowingFee = await alperpGetter.getBorrowingFee(userAddr, USDT, indexToken, false, p.size, p.entryBorrowingRate) as BigNumber;
