@@ -35,8 +35,8 @@ export default function Home() {
               <p> hedge position pnl: {commifyValue(tokenInfo.position.pnl)}</p>
               <p> hedge position net pnl: {commifyValue(tokenInfo.position.netPnl)}</p>
               <p> hedge position net value: {commifyValue(tokenInfo.position.netValue)}</p>
-              <p> hedge position funding fee: {commifyValue(tokenInfo.position.fundingFee)}</p>
-              <p> hedge position funding fee debt: {commifyValue(tokenInfo.position.fundingFeeDebt)}</p>
+              <p> hedge position funding fee: {commifyValue(tokenInfo.position.fundingFee.mul(-1))}</p>
+              <p> hedge position funding fee debt: {commifyValue(tokenInfo.position.fundingFeeDebt.mul(-1))}</p>
               <p> hedge position borrowing fee: {commifyValue(tokenInfo.position.borrowingFee)}</p>
               {/*<p> hedge position delta: {formatPositionDelta(tokenInfo.positionDelta)}</p>*/}
             </Card>

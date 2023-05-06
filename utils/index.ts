@@ -229,7 +229,7 @@ export const getAlperpPositions = async (userAddr: string): Promise<AlperpPositi
     // const minPrice = await alperpPoolOracle.getMinPrice(indexToken);
     // console.log({maxPrice})
     // const delta = await alperpGetter.getPositionDelta(userAddr, 0, collateral, indexToken, 0, {gasLimit: 10000000}) as AlperpPositionDelta;
-    poss.push({...pos, fundingFeeDebt: pos.fundingFeeDebt.mul(-1)});
+    poss.push(pos);
     // console.log({delta});
     // deltas.push(delta);
   }
@@ -273,13 +273,13 @@ export const useHedgeInfo = (userAddr: string, llpTokenAddr: string = JuniorLLp)
         const priceDelta = p.averagePrice.sub(a.price.mul(parseEther('1')));
         const pnl = p.size.mul(priceDelta).div(p.averagePrice);
         let fundingFee = await alperpGetter.getFundingFee(indexToken, false, p.size, p.entryFundingRate) as BigNumber;
-        fundingFee = fundingFee.add(p.fundingFeeDebt).mul(-1);
+        fundingFee = fundingFee.add(p.fundingFeeDebt);
         // console.log({pnl: pnl.toString(), p: pnl, priceDetal: priceDelta.toString()})
         //    address, /* account */ address collateralToken, address, /* indexToken */ bool, /* isLong */ uint256 size, uint256 entryBorrowingRate
         let borrowingFee = await alperpGetter.getBorrowingFee(userAddr, USDT, indexToken, false, p.size, p.entryBorrowingRate) as BigNumber;
         borrowingFee = borrowingFee.mul(-1);
         const netCollateral = p.collateral.add(borrowingFee);
-        const netPnl = pnl.add(fundingFee);
+        const netPnl = pnl.sub(fundingFee);
         const netValue = netCollateral.add(netPnl);
         poss.push({...p, borrowingFee, pnl, fundingFee, netCollateral, netPnl, netValue});
       }
