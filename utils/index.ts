@@ -229,7 +229,7 @@ export const getAlperpPositions = async (userAddr: string): Promise<AlperpPositi
     // const minPrice = await alperpPoolOracle.getMinPrice(indexToken);
     // console.log({maxPrice})
     // const delta = await alperpGetter.getPositionDelta(userAddr, 0, collateral, indexToken, 0, {gasLimit: 10000000}) as AlperpPositionDelta;
-    poss.push(pos);
+    poss.push({...pos, fundingFeeDebt: pos.fundingFeeDebt.mul(-1)});
     // console.log({delta});
     // deltas.push(delta);
   }
@@ -241,7 +241,6 @@ export const getAlperpPositionDeltas = async (positions: AlperpPosition[]): Prom
   for (let i = 0; i < TOKENS.length; i++) {
     const indexToken = TOKENS[i];
     const {size, averagePrice, lastIncreasedTime, entryFundingRate, fundingFeeDebt} = positions[i];
-    console.log({size, averagePrice, lastIncreasedTime, entryFundingRate, fundingFeeDebt});
     // const delta = await alperpGetter.getDelta(indexToken, size, averagePrice, false, lastIncreasedTime, entryFundingRate, fundingFeeDebt);
     const br = await alperpGetter.getEntryBorrowingRate(USDT, indexToken, false);
     console.log({br})
